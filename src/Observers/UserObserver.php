@@ -3,6 +3,7 @@
 namespace Azuriom\Plugin\Minecraft\Observers;
 
 use Azuriom\Models\User;
+use Azuriom\Models\Setting;
 
 class UserObserver
 {
@@ -21,7 +22,7 @@ class UserObserver
         {
             if(!$settings->has('minecraft_mc-offline_count'))
             {
-                $settings->put('minecraft_mc-offline_count', 1);
+                Setting::updateSettings(['minecraft_mc-offline_count' =>1]);
             }
         }
         
