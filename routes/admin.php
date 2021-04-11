@@ -1,7 +1,8 @@
 <?php
 
-use Azuriom\Plugin\Minecraft\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
+use Azuriom\Plugin\Minecraft\Controllers\Admin\AdminController;
+use Azuriom\Plugin\Minecraft\Controllers\Admin\ServerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [AdminController::class, 'index']);
+Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+Route::post('/settings', [AdminController::class, 'updateSettings'])->name('updateSettings');
+
+Route::resource('servers', ServerController::class)->only(['store', 'update']);
+Route::post('/servers/{server}/verify/azlink', [ServerController::class, 'verifyAzLink'])->name('servers.verify-azlink');

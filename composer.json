@@ -6,5 +6,8 @@
         "psr-4": {
             "Azuriom\\Plugin\\Minecraft\\": "src/"
         }
+    },
+    "require": {
+        "thedudeguy/rcon": "^1.0"
     }
 }

@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [MinecraftHomeController::class, 'index']);
+Route::get('/configure', [MinecraftHomeController::class, 'settings'])->name('settings');
+Route::post('/configure', [MinecraftHomeController::class, 'updateSettings'])->name('updateSettings');

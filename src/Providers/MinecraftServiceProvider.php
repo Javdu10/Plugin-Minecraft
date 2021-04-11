@@ -2,7 +2,14 @@
 
 namespace Azuriom\Plugin\Minecraft\Providers;
 
+use Azuriom\Models\User;
+use Azuriom\Providers\GameServiceProvider;
+use Azuriom\Plugin\Minecraft\Observers\UserObserver;
+use Azuriom\Plugin\Minecraft\Games\MinecraftOnlineGame;
 use Azuriom\Extensions\Plugin\BasePluginServiceProvider;
+use Azuriom\Plugin\Minecraft\Games\MinecraftBedrockGame;
+use Azuriom\Plugin\Minecraft\Games\MinecraftOfflineGame;
+use Azuriom\Plugin\Minecraft\Middlewares\IsGameInstalled;
 
 class MinecraftServiceProvider extends BasePluginServiceProvider
 {
@@ -12,7 +19,7 @@ class MinecraftServiceProvider extends BasePluginServiceProvider
      * @var array
      */
     protected $middleware = [
-        // \Azuriom\Plugin\Minecraft\Middleware\ExampleMiddleware::class,
+        IsGameInstalled::class,
     ];
 
     /**
@@ -47,9 +54,15 @@ class MinecraftServiceProvider extends BasePluginServiceProvider
      */
     public function register()
     {
+        require_once __DIR__.'/../../vendor/autoload.php';
+
         $this->registerMiddlewares();
 
-        //
+        GameServiceProvider::registerGames([
+            'mc-online' => MinecraftOnlineGame::class,
+            'mc-offline' => MinecraftOfflineGame::class,
+            'mc-bedrock' => MinecraftBedrockGame::class,
+        ]);
     }
 
     /**
@@ -73,7 +86,7 @@ class MinecraftServiceProvider extends BasePluginServiceProvider
 
         $this->registerUserNavigation();
 
-        //
+        User::observe(UserObserver::class);
     }
 
     /**
@@ -96,7 +109,15 @@ class MinecraftServiceProvider extends BasePluginServiceProvider
     protected function adminNavigation()
     {
         return [
-            //
+            'minecraft' => [
+                'name' => 'Minecraft',
+                'type' => 'dropdown',
+                'icon' => 'fas fa-gamepad',
+                'route' => 'minecraft.admin.*',
+                'items' => [
+                    'minecraft.admin.settings' => 'Settings',
+                ],
+            ],
         ];
     }
 
